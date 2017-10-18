@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +6,26 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app';
+    name: string;
+    imageUrl: string;
+    email: string;
+    checkLogin: boolean;
+
+    constructor(private ngZone: NgZone) {
+        window['onSignIn'] = (user) => ngZone.run(() => this.onSignIn(user));
+    }
+
+    onSignIn(googleUser) {
+      let profile = googleUser.getBasicProfile();
+      this.name = profile.getName();
+      this.imageUrl = profile.getImageUrl();
+      this.email = profile.getEmail();
+      if(this.name) {
+          this.checkLogin = true;
+      }
+    }
+
+    signOut() {
+     //signout here
+    }
 }
