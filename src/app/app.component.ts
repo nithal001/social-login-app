@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +12,24 @@ export class AppComponent {
     checkLogin: boolean;
 
     constructor(private ngZone: NgZone) {
-        window['onSignIn'] = (user) => ngZone.run(() => this.onSignIn(user));
+    }
+
+    ngOnInit() {
+        this.windowSignIn();
+        this.windowLoad();
+        this.windowSignOut();
+    }
+
+    windowSignIn() {
+        window['onSignIn'] = (user) => this.ngZone.run(() => this.onSignIn(user));
+    }
+
+    windowLoad() {
+        window['onLoad'] = () => this.ngZone.run(() => this.gapiLoad());
+    }
+
+    windowSignOut() {
+        window['signOut'] = () => this.ngZone.run(() => this.signOut());
     }
 
     onSignIn(googleUser) {
@@ -20,12 +37,24 @@ export class AppComponent {
       this.name = profile.getName();
       this.imageUrl = profile.getImageUrl();
       this.email = profile.getEmail();
-      if(this.name) {
+      if(this.name)
           this.checkLogin = true;
-      }
     }
 
     signOut() {
-     //signout here
+      let gapi = window['gapi'];
+      let auth2 = gapi.auth2.getAuthInstance();
+      auth2.disconnect();
+      setTimeout(() => {
+          window.location.reload();
+      }, 1000);
+    }
+
+    gapiLoad() {
+        let auth2 = 'auth2';
+        let gapi = window['gapi'];
+        gapi.load((auth2: string) => {
+            gapi.auth2.init();
+        });
     }
 }
