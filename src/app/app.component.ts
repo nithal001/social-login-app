@@ -16,16 +16,11 @@ export class AppComponent {
 
     ngOnInit() {
         this.windowSignIn();
-        this.windowLoad();
         this.windowSignOut();
     }
 
     windowSignIn() {
         window['onSignIn'] = (user) => this.ngZone.run(() => this.onSignIn(user));
-    }
-
-    windowLoad() {
-        window['onLoad'] = () => this.ngZone.run(() => this.gapiLoad());
     }
 
     windowSignOut() {
@@ -48,13 +43,5 @@ export class AppComponent {
       setTimeout(() => {
           window.location.reload();
       }, 1000);
-    }
-
-    gapiLoad() {
-        let auth2 = 'auth2';
-        let gapi = window['gapi'];
-        gapi.load((auth2: string) => {
-            gapi.auth2.init();
-        });
     }
 }
