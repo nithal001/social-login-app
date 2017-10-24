@@ -1,13 +1,1 @@
-<div class="container">
-<div [class.hide]="checkLogin">
-    <div class="g-signin2" data-onsuccess="onSignIn"></div>
-</div>
-<div class="card text-center" style="width: 20rem;" *ngIf="name?.length > 0">
-  <img class="card-img-top" [src]="imageUrl" alt="Card image cap">
-  <div class="card-body">
-    <h4 class="card-title">Hello, {{name}}</h4>
-    <p class="card-text">You are signed with {{email}}</p>
-    <a href="#" class="btn btn-primary" onclick="signOut();">Sign out</a>
-  </div>
-</div>
-</div>
+<app-login-google></app-login-google>
