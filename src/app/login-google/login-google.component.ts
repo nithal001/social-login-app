@@ -27,23 +27,23 @@ export class LoginGoogleComponent {
           this.zone.run(() => {
               this.auth2 = gapi.auth2.init({
                   client_id: this.clientId,
-                  cookiepolicy: 'single_host_origin',
-                  scope: 'profile'
+                  scope: 'profile email'
               });
-              this.signIn(this.element.nativeElement.firstChild);
-          })
+              let googleBtn = document.getElementById('customBtn');
+              this.signIn(googleBtn);
+          });
+
       });
   }
 
   public signIn(element) {
       this.zone.run(() => {
           this.auth2.attachClickHandler(element, {}, (googleUser) => {
-              let that = this;
               let profile = googleUser.getBasicProfile();
               this.name = profile.getName();
               this.imageUrl = profile.getImageUrl();
               this.email = profile.getEmail();
-              if(that.name)
+              if(this.name)
                  this.isLoggedIn = true;
           }, (error) => {
             console.log(JSON.stringify(error, undefined, 2));
