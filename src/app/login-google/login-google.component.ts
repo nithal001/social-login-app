@@ -40,7 +40,7 @@ export class LoginGoogleComponent {
           this.auth2.attachClickHandler(element, {}, (googleUser) => {
               let that = this;
               let profile = googleUser.getBasicProfile();
-              that.name = profile.getName();
+              this.name = profile.getName();
               this.imageUrl = profile.getImageUrl();
               this.email = profile.getEmail();
               if(that.name)
