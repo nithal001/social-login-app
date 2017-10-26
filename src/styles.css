@@ -2,3 +2,11 @@
 .hide {
     display: none;
 }
+
+.card {
+    display: none;
+}
+
+.card.show {
+    display: block;
+}
