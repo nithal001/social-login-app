@@ -1,15 +1,15 @@
-import { Component, OnInit, ElementRef, NgZone, AfterViewInit } from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-login-google',
   templateUrl: './login-google.component.html',
   styleUrls: ['./login-google.component.css']
 })
-export class LoginGoogleComponent implements AfterViewInit {
+export class LoginGoogleComponent {
   private clientId:string = '883827901969-js7iesmagmu16ume2c5gnq6p2iohhmov.apps.googleusercontent.com';
   private scope = [
       'profile ',
-      'email ',
+      'email '
   ].join('');
   public auth2: any;
   public name: string;
@@ -17,15 +17,12 @@ export class LoginGoogleComponent implements AfterViewInit {
   public email: string;
   public isLoggedIn: boolean = false;
 
-  constructor(private element: ElementRef, private zone: NgZone) {
+  constructor(private zone: NgZone,private changeDectectorRef:ChangeDetectorRef) {
   }
 
   ngOnInit() {
-      this.windowSignOut();
-  }
-
-  ngAfterViewInit() {
       this.loadApi();
+      this.windowSignOut();
   }
 
   public windowSignOut() {
@@ -34,8 +31,8 @@ export class LoginGoogleComponent implements AfterViewInit {
 
   public loadApi() {
       let gapi = window['gapi'];
-      gapi.load('auth2', () => {
-          this.zone.run(() => {
+      this.zone.run(() => {
+          gapi.load('auth2', () => {
               this.auth2 = gapi.auth2.init({
                   client_id: this.clientId,
                   scope: this.scope
@@ -55,6 +52,7 @@ export class LoginGoogleComponent implements AfterViewInit {
               this.email = profile.getEmail();
               if(this.name)
                  this.isLoggedIn = true;
+              this.changeDectectorRef.detectChanges();
           }, (error) => {
             console.log(JSON.stringify(error, undefined, 2));
           });
@@ -68,6 +66,7 @@ export class LoginGoogleComponent implements AfterViewInit {
          console.log('User signed out.');
       });
       this.isLoggedIn = false;
+      this.name = '';
   }
 
 }
